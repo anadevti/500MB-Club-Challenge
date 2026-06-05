@@ -33,6 +33,7 @@ services:
 
   api-1:
     image: aninhadev/500mb-api:latest
+    user: "65534:65534"
     environment:
       - REDIS_ADDR=redis:6379
       - LISTEN_ADDR=:8000
@@ -48,6 +49,7 @@ services:
 
   api-2:
     image: aninhadev/500mb-api:latest
+    user: "65534:65534"
     environment:
       - REDIS_ADDR=redis:6379
       - LISTEN_ADDR=:8000
@@ -63,6 +65,7 @@ services:
 
   api-3:
     image: aninhadev/500mb-api:latest
+    user: "65534:65534"
     environment:
       - REDIS_ADDR=redis:6379
       - LISTEN_ADDR=:8000
