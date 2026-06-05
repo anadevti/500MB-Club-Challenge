@@ -1,0 +1,9 @@
+{
+  "collaborators": [
+    {
+      "name": "Ana Carolyne",
+      "social_links": ["https://github.com/anadevti", "https://www.linkedin.com/in/ana-carolyne-pereira-de-souza/"]
+    }
+  ],
+  "stack": ["go", "redis", "nginx"]
+}
