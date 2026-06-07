@@ -17,6 +17,13 @@ services:
         limits:
           cpus: "0.10"
           memory: 32M
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
     restart: unless-stopped
 
   redis:
@@ -29,11 +36,14 @@ services:
         limits:
           cpus: "0.40"
           memory: 192M
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
     restart: unless-stopped
 
   api-1:
     image: aninhadev/500mb-api:latest
-    user: "65534:65534"
+    user: "app"
     environment:
       - REDIS_ADDR=redis:6379
       - LISTEN_ADDR=:8000
@@ -45,11 +55,18 @@ services:
         limits:
           cpus: "0.50"
           memory: 92M
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
     restart: unless-stopped
 
   api-2:
     image: aninhadev/500mb-api:latest
-    user: "65534:65534"
+    user: "app"
     environment:
       - REDIS_ADDR=redis:6379
       - LISTEN_ADDR=:8000
@@ -61,11 +78,18 @@ services:
         limits:
           cpus: "0.50"
           memory: 92M
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
     restart: unless-stopped
 
   api-3:
     image: aninhadev/500mb-api:latest
-    user: "65534:65534"
+    user: "app"
     environment:
       - REDIS_ADDR=redis:6379
       - LISTEN_ADDR=:8000
@@ -77,4 +101,11 @@ services:
         limits:
           cpus: "0.50"
           memory: 92M
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
     restart: unless-stopped
