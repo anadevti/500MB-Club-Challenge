@@ -14,9 +14,12 @@ FROM alpine:3.20
 
 WORKDIR /app
 
-COPY --from=builder /app/api .
+RUN addgroup -S app && adduser -S app -G app
 
-USER 65534:65534
+COPY --from=builder /app/api .
+RUN chown app:app /app/api && chmod +x /app/api
+
+USER app
 
 EXPOSE 8000
 
