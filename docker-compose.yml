@@ -48,21 +48,21 @@ services:
     restart: unless-stopped
 
   api-1:
-    image: aninhadev/500mb-api:v0.3
+    image: aninhadev/500mb-api:v0.4
     user: "app"
     environment:
       - REDIS_ADDR=redis:6379
       - LISTEN_ADDR=:8000
       - INSTANCE_ID=api-1
-      - GOMEMLIMIT=70MiB
-      - GOGC=50
+      - GOMEMLIMIT=75MiB
+      - GOGC=75
     depends_on:
       redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8000/readyz"]
-      interval: 2s
-      timeout: 1s
+      interval: 10s
+      timeout: 2s
       retries: 3
       start_period: 1s
     deploy:
@@ -80,21 +80,21 @@ services:
     restart: unless-stopped
 
   api-2:
-    image: aninhadev/500mb-api:v0.3
+    image: aninhadev/500mb-api:v0.4
     user: "app"
     environment:
       - REDIS_ADDR=redis:6379
       - LISTEN_ADDR=:8000
       - INSTANCE_ID=api-2
-      - GOMEMLIMIT=70MiB
-      - GOGC=50
+      - GOMEMLIMIT=75MiB
+      - GOGC=75
     depends_on:
       redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8000/readyz"]
-      interval: 2s
-      timeout: 1s
+      interval: 10s
+      timeout: 2s
       retries: 3
       start_period: 1s
     deploy:
@@ -112,21 +112,21 @@ services:
     restart: unless-stopped
 
   api-3:
-    image: aninhadev/500mb-api:v0.3
+    image: aninhadev/500mb-api:v0.4
     user: "app"
     environment:
       - REDIS_ADDR=redis:6379
       - LISTEN_ADDR=:8000
       - INSTANCE_ID=api-3
-      - GOMEMLIMIT=70MiB
-      - GOGC=50
+      - GOMEMLIMIT=75MiB
+      - GOGC=75
     depends_on:
       redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8000/readyz"]
-      interval: 2s
-      timeout: 1s
+      interval: 10s
+      timeout: 2s
       retries: 3
       start_period: 1s
     deploy:
