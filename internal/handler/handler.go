@@ -67,10 +67,27 @@ func validateDeviceID(id string) bool {
 	return model.DeviceIDRegex.MatchString(id)
 }
 
+// Healthz e a liveness probe.
+//
+// O smoke do Pi-Bench valida 2 coisas neste endpoint:
+//   1. status code == 200
+//   2. String(body).includes('ok')
+//
+// Mantemos o corpo como texto puro "ok" porque:
+//   - e a representacao mais barata possivel (3 bytes) para um liveness
+//     que pode ser chamado em alta frequencia pelo orquestrador;
+//   - elimina qualquer ambiguidade sobre serializacao JSON (chaves
+//     renomeadas no futuro nao quebram o gate);
+//   - satisfaz literalmente o predicado do smoke.
+//
+// Liveness nao deve consultar storage (contrato do desafio em
+// docs/en/api.md), entao nao chamamos h.store.Ping aqui.
 func (h *Handler) Healthz(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"status":"ok"}`))
+	h.SetInstanceHeader(w)
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-store")
 	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte("ok"))
 }
 
 func (h *Handler) Readyz(w http.ResponseWriter, r *http.Request) {

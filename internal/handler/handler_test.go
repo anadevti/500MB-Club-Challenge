@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/eleven/500mb-challenge/internal/model"
@@ -96,6 +97,12 @@ func serveWithMux(
 
 // --- Healthz ---
 
+// Garante o contrato exigido pelo smoke do Pi-Bench:
+//   - status 200
+//   - String(body).includes('ok')
+//   - header X-Instance-Id presente (sanidade interna; o smoke trata
+//     /healthz como excecao, mas como nao temos shortcut no nginx, nosso
+//     handler responde diretamente e segue carregando o header).
 func TestHandler_Healthz(t *testing.T) {
 	t.Parallel()
 
@@ -107,6 +114,27 @@ func TestHandler_Healthz(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.Equal(t, "test-instance", rec.Header().Get("X-Instance-Id"))
+	assert.True(t,
+		strings.Contains(rec.Body.String(), "ok"),
+		"healthz body precisa conter 'ok' (gate do smoke: includes('ok')); recebido=%q", rec.Body.String(),
+	)
+	assert.Equal(t, "text/plain; charset=utf-8", rec.Header().Get("Content-Type"))
+	assert.Equal(t, "no-store", rec.Header().Get("Cache-Control"))
+}
+
+// Liveness nao pode consultar storage (contrato do desafio).
+// Mesmo com o Ping do store falhando, /healthz deve continuar 200.
+func TestHandler_Healthz_DoesNotTouchStore(t *testing.T) {
+	t.Parallel()
+
+	h := newHandler(&mockStore{pingErr: fmt.Errorf("redis down")})
+	req := httptest.NewRequest(http.MethodGet, "/healthz", nil)
+	rec := httptest.NewRecorder()
+
+	h.Healthz(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Contains(t, rec.Body.String(), "ok")
 }
 
 // --- Readyz ---
