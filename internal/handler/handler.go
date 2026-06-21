@@ -68,7 +68,7 @@ func validateDeviceID(id string) bool {
 }
 
 func (h *Handler) Healthz(w http.ResponseWriter, r *http.Request) {
-	h.writeEmpty(w, http.StatusOK)
+	h.writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 }
 
 func (h *Handler) Readyz(w http.ResponseWriter, r *http.Request) {
