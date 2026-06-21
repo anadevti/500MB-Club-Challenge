@@ -42,7 +42,7 @@ services:
     restart: unless-stopped
 
   api-1:
-    image: aninhadev/500mb-api:latest
+    image: aninhadev/500mb-api:v0.2
     user: "app"
     environment:
       - REDIS_ADDR=redis:6379
@@ -65,7 +65,7 @@ services:
     restart: unless-stopped
 
   api-2:
-    image: aninhadev/500mb-api:latest
+    image: aninhadev/500mb-api:v0.2
     user: "app"
     environment:
       - REDIS_ADDR=redis:6379
@@ -88,7 +88,7 @@ services:
     restart: unless-stopped
 
   api-3:
-    image: aninhadev/500mb-api:latest
+    image: aninhadev/500mb-api:v0.2
     user: "app"
     environment:
       - REDIS_ADDR=redis:6379
